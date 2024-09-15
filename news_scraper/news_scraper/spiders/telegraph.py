@@ -1,17 +1,13 @@
 import scrapy
-from urllib.parse import urlparse
-from scrapy.spidermiddlewares.httperror import HttpError
-from twisted.internet.error import DNSLookupError, TimeoutError, TCPTimedOutError
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from scrapy.http import HtmlResponse
+from .base import BaseSpider
 
-class TelegraphSpider(scrapy.Spider):
+class TelegraphSpider(BaseSpider):
     name = 'telegraphindia'
 
     def start_requests(self):
-        # The URL will be passed as an argument via the command line
         url = getattr(self, 'url', None)
         
         # Validate the URL
@@ -32,10 +28,6 @@ class TelegraphSpider(scrapy.Spider):
             )
         else:
             self.logger.error("Invalid URL: The provided URL is not from " + self.name + ".com.")
-    
-    def isValidUrl(self, url):
-        parsed_url = urlparse(url)
-        return (self.name +'.com') in parsed_url.netloc
 
     def parse(self, response):
         if response.status == 403:
@@ -73,17 +65,6 @@ class TelegraphSpider(scrapy.Spider):
 
     def extract_article_content(self, response):
         soup = BeautifulSoup(response.text, 'html.parser')
-        content_divs = soup.find_all('article', id = 'contentbox')
-        text_content = ' '.join(div.get_text(strip=True) for div in content_divs)
+        content_div = soup.find('div', class_ = 'articlemidbox')
+        text_content = content_div.get_text(strip=True)
         return text_content
-
-    def handle_error(self, failure):
-        self.logger.error(repr(failure))
-        if failure.check(HttpError):
-            response = failure.value.response
-            self.logger.error(f"HttpError on {response.url}")
-        elif failure.check(DNSLookupError):
-            self.logger.error("DNSLookupError: Check your domain")
-        elif failure.check(TimeoutError, TCPTimedOutError):
-            self.logger.error("TimeoutError or TCPTimedOutError: The request timed out")
-

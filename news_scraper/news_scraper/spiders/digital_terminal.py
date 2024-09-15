@@ -1,31 +1,9 @@
 import scrapy
-from urllib.parse import urlparse
 from bs4 import BeautifulSoup
+from .base import BaseSpider
 
-class DigitalTerminalSpider(scrapy.Spider):
-    name = 'digital_terminal'
-
-    def start_requests(self):
-        # The URL will be passed as an argument via the command line
-        url = getattr(self, 'url', None)
-        
-        # Validate the URL
-        if url and self.is_digital_terminal_url(url):
-            yield scrapy.Request(
-                url=url,
-                callback=self.parse,
-                headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
-                },
-                errback=self.handle_error
-            )
-        else:
-            self.log("Invalid URL: The provided URL is not from digitalterminal.in.")
-    
-    def is_digital_terminal_url(self, url):
-        """Check if the given URL belongs to digitalterminal.in"""
-        parsed_url = urlparse(url)
-        return 'digitalterminal.in' in parsed_url.netloc
+class DigitalTerminalSpider(BaseSpider):
+    name = 'digitalterminal'
 
     def parse(self, response):
         if response.status == 403:
@@ -63,16 +41,3 @@ class DigitalTerminalSpider(scrapy.Spider):
         except Exception as e:
             self.logger.error(f"Error extracting category: {e}")
         return ''
-
-    def handle_error(self, failure):
-        # Log the error
-        self.logger.error(repr(failure))
-
-        # Check if failure is a response failure
-        if failure.check(HttpError):
-            response = failure.value.response
-            self.logger.error(f"HttpError on {response.url}")
-        elif failure.check(DNSLookupError):
-            self.logger.error("DNSLookupError: Check your domain")
-        elif failure.check(TimeoutError, TCPTimedOutError):
-            self.logger.error("TimeoutError or TCPTimedOutError: The request timed out")
