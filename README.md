@@ -23,7 +23,7 @@ Before you begin, ensure you have met the following requirements:
 To get started, clone the repository to your local machine:
 ```console
 git clone https://github.com/manishamakhija/webscrap.git
-cd websrap/news_scraper/news_scraper
+cd webscrap/news_scraper/news_scraper
 ```
 ### 2. Install Python
 If you're on macOS and Python is not installed, you can install Python 3.9 using Homebrew:
