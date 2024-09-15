@@ -22,7 +22,7 @@ Before you begin, ensure you have met the following requirements:
 ### 1. Clone the Repository
 To get started, clone the repository to your local machine:
 ```console
-https://github.com/manishamakhija/webscrap.git
+git clone https://github.com/manishamakhija/webscrap.git
 cd news_scraper/news_scraper
 ```
 ### 2. Install Python
