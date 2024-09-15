@@ -32,14 +32,11 @@ brew install python@3.9
 ```
 On other operating systems, you can download Python from the official Python website.
 
-### 3. Install Required Libraries
-Next, install the necessary dependencies for the project:
+### 3. Create VM
 ```console
-pip3 install scrapy beautifulsoup4 selenium
-```
-if got any issue in above command then try
-``` console
-pip3 install scrapy beautifulsoup4 selenium --break-system-packages
+python3 -m venv venv
+source venv/bin/activate
+pip install scrapy beautifulsoup4 selenium
 ```
 
 ## Usage
@@ -69,6 +66,12 @@ Sample response format for a Digital Terminal article:
   }
 ]
 ```
+
+### 6. Deactive VM:
+```console
+deactivate
+```
+
 
 ## Examples
 Here’s how you can use the scraper for different websites:
