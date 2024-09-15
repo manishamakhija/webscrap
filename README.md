@@ -35,7 +35,11 @@ On other operating systems, you can download Python from the official Python web
 ### 3. Install Required Libraries
 Next, install the necessary dependencies for the project:
 ```console
-pip install scrapy beautifulsoup4 selenium
+pip3 install scrapy beautifulsoup4 selenium
+```
+if got any issue in above command then try
+``` console
+pip3 install scrapy beautifulsoup4 selenium --break-system-packages
 ```
 
 ## Usage
